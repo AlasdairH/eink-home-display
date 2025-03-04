@@ -1,0 +1,328 @@
+esphome:
+  name: esphome-web-b2fca4
+  friendly_name: Chalkie
+  min_version: 2024.11.0
+  name_add_mac_suffix: false
+  on_boot:
+    priority: 200.0
+    then:
+      - component.update: eink_display
+      - wait_until:
+          condition:
+            lambda: 'return id(data_updated) == true;'
+            # Wait a bit longer so all the items are received
+      - delay: 5s
+      - logger.log: "Initial sensor data received: Refreshing display..."
+      - lambda: 'id(initial_data_received) = true;'
+      - script.execute: update_screen
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Allow Over-The-Air updates
+ota:
+- platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  use_address: 192.168.4.67 # CHANGE THIS
+
+
+# Include custom fonts
+font:
+  - file: 'fonts/GothamRnd-Book.ttf'
+    id: font_small_book
+    size: 18
+    glyphs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', ' ', '°', '.','m', '%']
+  - file: 'fonts/GothamRnd-Bold.ttf'
+    id: font_large_bold
+    size: 108
+    glyphs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', ' ', '°', '.', '%']
+  - file: 'fonts/GothamRnd-Bold.ttf'
+    id: font_title
+    size: 54
+    glyphs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', ' ', '°', '.', '%']
+  - file: 'fonts/GothamRnd-Bold.ttf'
+    id: font_medium_bold
+    size: 26
+    glyphs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', ' ', '°', '.', '%']
+  - file: 'fonts/GothamRnd-Bold.ttf'
+    id: font_small_bold
+    size: 18
+    glyphs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', ' ', '°', '.', '%']
+
+
+  # Include Material Design Icons font
+  # Thanks to https://community.home-assistant.io/t/display-materialdesign-icons-on-esphome-attached-to-screen/199790/16
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: font_mdi_large
+    size: 96
+    glyphs: &mdi-weather-glyphs
+      - "\U000F0590" # weather-cloudy
+      - "\U000F0591" # weather-fog
+      - "\U000F0592" # weather-hail
+      - "\U000F0F30" # weather-hazy
+      - "\U000F0898" # weather-hurricane
+      - "\U000F0593" # weather-lightning
+      - "\U000F067E" # weather-lightning-rainy
+      - "\U000F0594" # weather-night
+      - "\U000F0F31" # weather-night-partly-cloudy
+      - "\U000F0595" # weather-partly-cloudy
+      - "\U000F0F32" # weather-partly-lightning
+      - "\U000F0F33" # weather-partly-rainy
+      - "\U000F0F34" # weather-partly-snowy
+      - "\U000F0F35" # weather-partly-snowy-rainy
+      - "\U000F0596" # weather-pouring
+      - "\U000F0597" # weather-rainy
+      - "\U000F0598" # weather-snowy
+      - "\U000F0F36" # weather-snowy-heavy
+      - "\U000F067F" # weather-snowy-rainy
+      - "\U000F0599" # weather-sunny
+      - "\U000F0F37" # weather-sunny-alert
+      - "\U000F14E4" # weather-sunny-off
+      - "\U000F059A" # weather-sunset
+      - "\U000F059B" # weather-sunset-down
+      - "\U000F059C" # weather-sunset-up
+      - "\U000F0F38" # weather-tornado
+      - "\U000F059D" # weather-windy
+      - "\U000F059E" # weather-windy-variant
+      - "\U000F054B" # mdi umbrella-outline
+      - "\U000F0F29" # mdi snowflake-alert
+      - "\U000F081C" # mdi-door-open
+      - "\U000F05D6" # mdi alert-circle-outline
+      - "\U000F0C84" # mdi food-apple-outline
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: font_mdi_medlarge
+    size: 18
+    glyphs:
+      - "\U000F054B" # mdi umbrella-outline
+      - "\U000F0F29" # mdi snowflake-alert
+      - "\U000F0535" # mdi trending-up
+      - "\U000F0533" # mdi trending-down 
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: font_mdi_medium
+    size: 70
+    glyphs: *mdi-weather-glyphs
+
+
+# Check whether the display needs to be refreshed every minute,
+# based on whether new data is received or motion is detected. (Thanks @paviro!)
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    on_time:
+      - seconds: 0
+        minutes: /5
+        then:
+          - if:
+              condition:
+                lambda: 'return id(data_updated) == true;'
+              then:
+                - logger.log: "Refreshing display..."
+                - script.execute: update_screen
+              else:
+                - logger.log: "No data change detected."
+
+
+# Creates buttons in Home Assistant to
+button:
+  - platform: shutdown
+    name: "Chalkie - Shutdown"
+  - platform: restart
+    name: "Chalkie - Restart"
+  - platform: template
+    name: "Chalkie - Refresh Screen"
+    entity_category: config
+    on_press:
+      - script.execute: update_screen
+
+
+sensor:
+  # Create sensors for monitoring Weatherman remotely.
+  - platform: template
+    name: "Chalkie - Display Last Update"
+    device_class: timestamp
+    entity_category: "diagnostic"
+    id: display_last_update
+
+  # Temperature right now
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_temperature_0
+    id: weather_temperature_0
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+
+
+text_sensor:
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: service
+    id: service
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+
+  # Weather Condition right now
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_condition_0
+    id: weather_condition_0
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+
+  # Sunrise
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: next_sunrise
+    id: next_sunrise
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Sunset
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: next_sunset
+    id: next_sunset
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Day Length
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: day_length
+    id: day_length
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+
+  # Day of the week
+  - platform: template
+    name: "Day of the Week"
+    id: day_of_the_week
+    lambda: |-
+      time_t now = id(homeassistant_time).now().timestamp;
+      struct tm timeinfo;
+      localtime_r(&now, &timeinfo);
+      static std::string days[] = {"SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"};
+      const std::string dayNum = std::to_string(timeinfo.tm_mday);
+      return std::string(days[timeinfo.tm_wday] + " " + dayNum);
+    update_interval: 1200s
+    internal: true
+
+
+# Global variables for detecting if the display needs to be refreshed. (Thanks @paviro!)
+globals:
+  - id: data_updated
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+  - id: initial_data_received
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+  - id: recorded_display_refresh
+    type: int
+    restore_value: yes
+    initial_value: '0'
+
+
+# Script for updating screen - Refresh display and publish refresh count and time. (Thanks @paviro!)
+script:
+  - id: update_screen
+    then:
+      - lambda: 'id(data_updated) = false;'
+      - component.update: eink_display
+      - lambda: 'id(recorded_display_refresh) += 1;'
+      - lambda: 'id(display_last_update).publish_state(id(homeassistant_time).now().timestamp);'
+
+
+# Pins for Waveshare ePaper ESP Board
+spi:
+  clk_pin: GPIO13
+  mosi_pin: GPIO14
+
+
+# Now render everything on the ePaper screen.
+display:
+  - platform: waveshare_epaper
+    id: eink_display
+    cs_pin: GPIO15
+    dc_pin: GPIO27
+    busy_pin: GPIO25
+    reset_pin: GPIO26
+    reset_duration: 2ms
+    model: 7.50inV2
+    update_interval: never
+    rotation: 90°
+    lambda: |-
+      const int screenWidth = 480;
+
+      //# Print loading screen before data is received.
+      if (id(initial_data_received) == false) {
+        it.printf(240, 390, id(font_small_bold), TextAlign::TOP_CENTER, "WAITING FOR DATA...");
+        return;
+      }
+
+      // Map weather states to MDI characters.
+      std::map<std::string, std::string> weather_icon_map {
+        {"cloudy", "\U000F0590"},
+        {"fog", "\U000F0591"},
+        {"hail", "\U000F0592"},
+        {"hazy", "\U000F0F30"},
+        {"lightning", "\U000F0593"},
+        {"lightning-rainy", "\U000F067E"},
+        {"night", "\U000F0594"},
+        {"night-partly-cloudy", "\U000F0F31"},
+        {"partlycloudy", "\U000F0595"},
+        {"partly-lightning", "\U000F0F32"},
+        {"partly-rainy", "\U000F0F33"},
+        {"partly-snowy", "\U000F0F34"},
+        {"partly-snowy-rainy", "\U000F0F35"},
+        {"pouring", "\U000F0596"},
+        {"rainy", "\U000F0597"},
+        {"snowy", "\U000F0598"},
+        {"snowy-heavy", "\U000F0F36"},
+        {"snowy-rainy", "\U000F067F"},
+        {"sunny", "\U000F0599"},
+        {"sunny-alert", "\U000F0F37"},
+        {"sunny-off", "\U000F14E4"},
+        {"sunset", "\U000F059A"},
+        {"sunset-down", "\U000F059B"},
+        {"sunset-up", "\U000F059C"},
+        {"windy", "\U000F059D"},
+        {"windy-variant", "\U000F059E"},
+      };
+
+      it.printf(240, 100, id(font_title), TextAlign::TOP_CENTER, "%s", id(day_of_the_week).state.c_str());
+
+      it.printf(100, 170, id(font_mdi_large), TextAlign::TOP_CENTER, "%s", weather_icon_map[id(weather_condition_0).state.c_str()].c_str());
+      it.printf(300, 170, id(font_large_bold), TextAlign::TOP_CENTER, "%2.0f°C", id(weather_temperature_0).state);
+
+      const int lineHeight = 295;
+      const int lineThickness = 6;
+      int margin = 56;
+      it.filled_rectangle(margin, lineHeight - lineThickness, screenWidth - margin * 2, lineThickness * 2);
+      it.filled_circle(margin, lineHeight, lineThickness - 1);
+      it.filled_circle(screenWidth - margin, lineHeight, lineThickness - 1);
+
+      margin = 120;
+      it.printf(margin, 350, id(font_mdi_medium), TextAlign::CENTER, "%s", weather_icon_map["sunset-up"].c_str());
+      it.printf(margin, 395, id(font_medium_bold), TextAlign::TOP_CENTER, "%s", id(next_sunrise).state.c_str());
+
+      it.printf(screenWidth - margin, 350, id(font_mdi_medium), TextAlign::CENTER, "%s", weather_icon_map["sunset-down"].c_str());
+      it.printf(screenWidth - margin, 395, id(font_medium_bold), TextAlign::TOP_CENTER, "%s", id(next_sunset).state.c_str());
+
+      // Day Length
+      it.printf(screenWidth / 2, 375, id(font_medium_bold), TextAlign::TOP_CENTER, "%s", id(day_length).state.c_str());

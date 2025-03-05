@@ -34,7 +34,7 @@ ota:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  use_address: 192.168.4.67 # CHANGE THIS
+  use_address: 192.168.4.67
 
 
 # Include custom fonts
@@ -58,7 +58,7 @@ font:
   - file: 'fonts/GothamRnd-Bold.ttf'
     id: font_small_bold
     size: 18
-    glyphs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', ' ', '°', '.', '%']
+    glyphs: ['p', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', ' ', '°', '.', '%']
 
 
   # Include Material Design Icons font
@@ -101,16 +101,12 @@ font:
       - "\U000F05D6" # mdi alert-circle-outline
       - "\U000F0C84" # mdi food-apple-outline
   - file: 'fonts/materialdesignicons-webfont.ttf'
-    id: font_mdi_medlarge
-    size: 18
-    glyphs:
-      - "\U000F054B" # mdi umbrella-outline
-      - "\U000F0F29" # mdi snowflake-alert
-      - "\U000F0535" # mdi trending-up
-      - "\U000F0533" # mdi trending-down 
-  - file: 'fonts/materialdesignicons-webfont.ttf'
     id: font_mdi_medium
     size: 70
+    glyphs: *mdi-weather-glyphs
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: font_mdi_small
+    size: 50
     glyphs: *mdi-weather-glyphs
 
 
@@ -162,7 +158,64 @@ sensor:
     on_value:
       then:
         - lambda: 'id(data_updated) = true;'
+  # Temperature +1
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_temperature_1
+    id: weather_temperature_1
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Temperature +2
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_temperature_2
+    id: weather_temperature_2
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Temperature +3
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_temperature_3
+    id: weather_temperature_3
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
 
+  # ==================================================
+  # Agile Rate +0
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: agile_0_rate
+    id: agile_0_rate
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Agile Rate +1
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: agile_1_rate
+    id: agile_1_rate
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Agile Rate +2
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: agile_2_rate
+    id: agile_2_rate
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Agile Rate +3
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: agile_3_rate
+    id: agile_3_rate
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
 
 text_sensor:
   - platform: homeassistant
@@ -173,6 +226,7 @@ text_sensor:
       then:
         - lambda: 'id(data_updated) = true;'
 
+  # ==================================================
   # Weather Condition right now
   - platform: homeassistant
     entity_id: sensor.chalky_data
@@ -181,7 +235,66 @@ text_sensor:
     on_value:
       then:
         - lambda: 'id(data_updated) = true;'
+  # Weather Condition +1
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_condition_1
+    id: weather_condition_1
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Weather Condition +2
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_condition_2
+    id: weather_condition_2
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Weather Condition +3
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_condition_3
+    id: weather_condition_3
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
 
+  # ==================================================
+  # Weather Timestamp right now
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_timestamp_0
+    id: weather_timestamp_0
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Weather Timestamp +1
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_timestamp_1
+    id: weather_timestamp_1
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Weather Timestamp +2
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_timestamp_2
+    id: weather_timestamp_2
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Weather Timestamp +3
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: weather_timestamp_3
+    id: weather_timestamp_3
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+
+  # ==================================================
   # Sunrise
   - platform: homeassistant
     entity_id: sensor.chalky_data
@@ -203,6 +316,40 @@ text_sensor:
     entity_id: sensor.chalky_data
     attribute: day_length
     id: day_length
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+
+  # ==================================================
+  # Agile From +0
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: agile_0_from
+    id: agile_0_from
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Agile From +1
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: agile_1_from
+    id: agile_1_from
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Agile From +2
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: agile_2_from
+    id: agile_2_from
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
+  # Agile From +3
+  - platform: homeassistant
+    entity_id: sensor.chalky_data
+    attribute: agile_3_from
+    id: agile_3_from
     on_value:
       then:
         - lambda: 'id(data_updated) = true;'
@@ -279,11 +426,13 @@ display:
       std::map<std::string, std::string> weather_icon_map {
         {"cloudy", "\U000F0590"},
         {"fog", "\U000F0591"},
+        {"fog a", "\U000F0591"},
         {"hail", "\U000F0592"},
         {"hazy", "\U000F0F30"},
         {"lightning", "\U000F0593"},
         {"lightning-rainy", "\U000F067E"},
         {"night", "\U000F0594"},
+        {"clear-night a", "\U000F0594"},
         {"night-partly-cloudy", "\U000F0F31"},
         {"partlycloudy", "\U000F0595"},
         {"partly-lightning", "\U000F0F32"},
@@ -310,19 +459,120 @@ display:
       it.printf(100, 170, id(font_mdi_large), TextAlign::TOP_CENTER, "%s", weather_icon_map[id(weather_condition_0).state.c_str()].c_str());
       it.printf(300, 170, id(font_large_bold), TextAlign::TOP_CENTER, "%2.0f°C", id(weather_temperature_0).state);
 
-      const int lineHeight = 295;
-      const int lineThickness = 6;
-      int margin = 56;
-      it.filled_rectangle(margin, lineHeight - lineThickness, screenWidth - margin * 2, lineThickness * 2);
-      it.filled_circle(margin, lineHeight, lineThickness - 1);
-      it.filled_circle(screenWidth - margin, lineHeight, lineThickness - 1);
+      {
+        const int lineHeight = 295;
+        const int lineThickness = 6;
+        int margin = 56;
+        it.filled_rectangle(margin, lineHeight - lineThickness, screenWidth - margin * 2, lineThickness * 2);
+        it.filled_circle(margin, lineHeight, lineThickness - 1);
+        it.filled_circle(screenWidth - margin, lineHeight, lineThickness - 1);
+      }
 
-      margin = 120;
-      it.printf(margin, 350, id(font_mdi_medium), TextAlign::CENTER, "%s", weather_icon_map["sunset-up"].c_str());
-      it.printf(margin, 395, id(font_medium_bold), TextAlign::TOP_CENTER, "%s", id(next_sunrise).state.c_str());
+      // Weather Timeline
+      {
+        std::string timestamps[] = {
+          id(weather_timestamp_0).state, id(weather_timestamp_1).state, id(weather_timestamp_2).state, id(weather_timestamp_3).state,
+        };
+        std::string conditions[] = {
+          id(weather_condition_0).state, id(weather_condition_1).state, id(weather_condition_2).state, id(weather_condition_3).state,
+        };
+        float temperatures[] = {
+          id(weather_temperature_0).state, id(weather_temperature_1).state, id(weather_temperature_2).state, id(weather_temperature_3).state,
+        };
 
-      it.printf(screenWidth - margin, 350, id(font_mdi_medium), TextAlign::CENTER, "%s", weather_icon_map["sunset-down"].c_str());
-      it.printf(screenWidth - margin, 395, id(font_medium_bold), TextAlign::TOP_CENTER, "%s", id(next_sunset).state.c_str());
+        const int baseHeight = 330;
+        const int items = 4;
+        const int margin = screenWidth / (items + 1);
+        for (int i = 1; i < items + 1; ++i)
+        {
+          const int idx = i - 1;
+          it.printf(margin * i, baseHeight, id(font_medium_bold), TextAlign::CENTER, "%2.0f°C", temperatures[idx]);
+          it.printf(margin * i, baseHeight + 40, id(font_mdi_small), TextAlign::CENTER, "%s", weather_icon_map[conditions[idx].c_str()].c_str());
+          it.printf(margin * i, baseHeight + 80, id(font_medium_bold), TextAlign::CENTER, "%s", timestamps[idx].c_str());
+        }
+      }
 
-      // Day Length
-      it.printf(screenWidth / 2, 375, id(font_medium_bold), TextAlign::TOP_CENTER, "%s", id(day_length).state.c_str());
+      // Divider
+      {
+        const int lineHeight = 440;
+        const int lineThickness = 4;
+        int margin = 56;
+        it.filled_rectangle(margin, lineHeight - lineThickness, screenWidth - margin * 2, lineThickness * 2);
+        it.filled_circle(margin, lineHeight, lineThickness - 1);
+        it.filled_circle(screenWidth - margin, lineHeight, lineThickness - 1);
+      }
+
+      // Sunset / Sunrise
+      {
+        const int baseHeight = 485;
+        const int margin = 120;
+        it.printf(margin, baseHeight, id(font_mdi_medium), TextAlign::CENTER, "%s", weather_icon_map["sunset-up"].c_str());
+        it.printf(margin, baseHeight + 45, id(font_medium_bold), TextAlign::TOP_CENTER, "%s", id(next_sunrise).state.c_str());
+
+        it.printf(screenWidth - margin, baseHeight, id(font_mdi_medium), TextAlign::CENTER, "%s", weather_icon_map["sunset-down"].c_str());
+        it.printf(screenWidth - margin, baseHeight + 45, id(font_medium_bold), TextAlign::TOP_CENTER, "%s", id(next_sunset).state.c_str());
+
+        // Day Length
+        it.printf(screenWidth / 2, baseHeight + 5, id(font_medium_bold), TextAlign::TOP_CENTER, "%s", id(day_length).state.c_str());
+      }
+
+      // Divider
+      {
+        const int lineHeight = 570;
+        const int lineThickness = 2;
+        int margin = 56;
+        it.filled_rectangle(margin, lineHeight - lineThickness, screenWidth - margin * 2, lineThickness * 2);
+        it.filled_circle(margin, lineHeight, lineThickness - 1);
+        it.filled_circle(screenWidth - margin, lineHeight, lineThickness - 1);
+      }
+
+      // Agile Timeline
+      {
+        const int baseHeight = 590;
+        const int items = 4;
+        const int margin = screenWidth / (items + 1);
+
+        std::string timestamps[] = {
+          id(agile_0_from).state, id(agile_1_from).state, id(agile_2_from).state, id(agile_3_from).state,
+        };
+        float rates[] = {
+          id(agile_0_rate).state, id(agile_1_rate).state, id(agile_2_rate).state, id(agile_3_rate).state,
+        };
+
+        float maxRate = -100.0f;
+        float minRate = 100.0f;
+        for (int i = 0; i < items; ++i)
+        {
+          const float rate = rates[i];
+          if (rate > maxRate)
+            maxRate = rate;
+          if (rate < minRate)
+            minRate = rate;
+        }
+
+        float lastPointY = -1.0f;
+        for (int i = 1; i < items + 1; ++i)
+        {
+          const int idx = i - 1;
+          const float rate = rates[idx];
+          const float rateLerp = ((rate - minRate) / (maxRate - minRate));
+          const float pointY = (baseHeight + 90) * (1.0 - rateLerp) + (baseHeight * rateLerp);
+
+          // Draw graph
+          it.filled_circle(margin * i, pointY, 4);
+          if (idx > 0)
+          {
+            it.line(margin * idx, lastPointY, margin * i, pointY);
+            it.line(margin * idx, lastPointY + 1, margin * i, pointY + 1);
+            it.line(margin * idx, lastPointY - 1, margin * i, pointY - 1);
+          }
+          // Draw timeline
+          it.printf(margin * i, baseHeight + 130, id(font_medium_bold), TextAlign::CENTER, "%s", timestamps[idx].c_str());
+
+          lastPointY = pointY;
+        }
+
+        it.printf(65, baseHeight, id(font_small_bold), TextAlign::CENTER, "%0.0fp", maxRate);
+        it.printf(65, baseHeight + 90, id(font_small_bold), TextAlign::CENTER, "%0.0fp", minRate);
+      }
+
